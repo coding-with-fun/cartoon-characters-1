@@ -11,10 +11,6 @@ class MyDocument extends Document {
                         Here's every type of meta tag you need to know about. 
                         The purpose of a meta description is to reflect the essence of a page, but with more details and context."
                     />
-                    <meta
-                        name="viewport"
-                        content="initial-scale=1, width=device-width"
-                    />
 
                     <link
                         rel="preconnect"

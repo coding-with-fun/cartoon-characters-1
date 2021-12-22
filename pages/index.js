@@ -1,9 +1,28 @@
 import { Typography } from "@mui/material";
+import axios from "axios";
 import Head from "next/head";
+import { useContext, useEffect } from "react";
+import { UserDataContext } from "../context/UserDataContext";
 import styles from "../styles/Home.module.css";
 
-const Home = ({ posts }) => {
-    console.log(posts);
+const Home = () => {
+    const { userData } = useContext(UserDataContext);
+
+    useEffect(() => {
+        // fetchData();
+
+        console.log(userData);
+    }, [userData]);
+
+    const handleSendAPI = async () => {
+        const response = await axios.post("https://reqres.in/api/users", {
+            avatar: "https://reqres.in/img/faces/1-image.jpg",
+            email: "george.bluth@reqres.in",
+            first_name: "George",
+            last_name: "Bluth",
+        });
+        console.log(response.data);
+    };
 
     return (
         <div className={styles.container}>
@@ -18,20 +37,11 @@ const Home = ({ posts }) => {
 
             <div>
                 <Typography variant="h3">Hello World</Typography>
+
+                <button onClick={handleSendAPI}>Send</button>
             </div>
         </div>
     );
 };
-
-export async function getStaticProps() {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users");
-    const posts = await res.json();
-
-    return {
-        props: {
-            posts,
-        },
-    };
-}
 
 export default Home;

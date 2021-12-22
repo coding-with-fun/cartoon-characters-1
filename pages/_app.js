@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { UserDataProvider } from "../context/UserDataContext";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Component {...pageProps} />
+            <UserDataProvider>
+                <Component {...pageProps} />
+            </UserDataProvider>
         </ThemeProvider>
     );
 }

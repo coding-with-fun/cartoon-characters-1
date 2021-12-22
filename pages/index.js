@@ -2,7 +2,9 @@ import { Typography } from "@mui/material";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+const Home = ({ posts }) => {
+    console.log(posts);
+
     return (
         <div className={styles.container}>
             <Head>
@@ -19,4 +21,17 @@ export default function Home() {
             </div>
         </div>
     );
+};
+
+export async function getStaticProps() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const posts = await res.json();
+
+    return {
+        props: {
+            posts,
+        },
+    };
 }
+
+export default Home;

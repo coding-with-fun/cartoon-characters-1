@@ -5,14 +5,15 @@ import { useContext, useEffect } from "react";
 import { UserDataContext } from "../context/UserDataContext";
 import styles from "../styles/Home.module.css";
 
-const Home = () => {
+const Home = ({ data, status, statusText }) => {
     const { userData } = useContext(UserDataContext);
 
     useEffect(() => {
         // fetchData();
 
-        console.log(userData);
-    }, [userData]);
+        console.log(data, status, statusText);
+        // console.log(userData);
+    }, [data, status, statusText]);
 
     const handleSendAPI = async () => {
         const response = await axios.post("https://reqres.in/api/users", {
@@ -42,6 +43,20 @@ const Home = () => {
             </div>
         </div>
     );
+};
+
+export const getStaticProps = async () => {
+    const { data, status, statusText } = await axios.get(
+        "https://reqres.in/api/users"
+    );
+
+    return {
+        props: {
+            data,
+            status,
+            statusText,
+        }, // will be passed to the page component as props
+    };
 };
 
 export default Home;

@@ -12,6 +12,7 @@ export const UserDataProvider = ({ children }) => {
 
     const fetchData = async () => {
         const res = await axios.get("https://reqres.in/api/users");
+        console.log(res);
         setUserData(res.data.data);
     };
 

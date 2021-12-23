@@ -1,32 +1,18 @@
-import { Typography } from "@mui/material";
+import { Container, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
-import { useContext, useEffect } from "react";
-import { UserDataContext } from "../context/UserDataContext";
-import styles from "../styles/Home.module.css";
+import Link from "next/link";
+import { useRouter, withRouter } from "next/router";
+import { useState } from "react";
 
 const Home = ({ data, status, statusText }) => {
-    const { userData } = useContext(UserDataContext);
+    const router = useRouter();
 
-    useEffect(() => {
-        // fetchData();
-
-        console.log(data, status, statusText);
-        // console.log(userData);
-    }, [data, status, statusText]);
-
-    const handleSendAPI = async () => {
-        const response = await axios.post("https://reqres.in/api/users", {
-            avatar: "https://reqres.in/img/faces/1-image.jpg",
-            email: "george.bluth@reqres.in",
-            first_name: "George",
-            last_name: "Bluth",
-        });
-        console.log(response.data);
-    };
+    const [myName, setMyName] = useState("");
+    console.log(data);
 
     return (
-        <div className={styles.container}>
+        <div>
             <Head>
                 <title>Create Next App</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -36,18 +22,70 @@ const Home = ({ data, status, statusText }) => {
                 />
             </Head>
 
-            <div>
-                <Typography variant="h3">Hello World</Typography>
+            {status === 200 ? (
+                <Container
+                    sx={{
+                        display: "flex",
+                        flexFlow: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    {data.map((todo) => {
+                        return (
+                            <Typography variant="body1" key={todo.id}>
+                                {todo.name}
+                            </Typography>
+                        );
+                    })}
 
-                <button onClick={handleSendAPI}>Send</button>
-            </div>
+                    <TextField
+                        value={myName}
+                        onChange={(e) => {
+                            setMyName(e.target.value);
+                        }}
+                    />
+
+                    <Typography
+                        variant="body1"
+                        onClick={() => {
+                            router.push({
+                                pathname: "/name",
+                                query: {
+                                    name: myName,
+                                },
+                            });
+                        }}
+                    >
+                        history.push to <code>/name</code> page.
+                    </Typography>
+
+                    <Link
+                        href={{
+                            pathname: "/name",
+                            query: {
+                                name: myName,
+                            },
+                        }}
+                    >
+                        <a>
+                            Link to <code>/name</code> page.
+                        </a>
+                    </Link>
+                </Container>
+            ) : null}
         </div>
     );
 };
 
 export const getStaticProps = async () => {
     const { data, status, statusText } = await axios.get(
-        "https://reqres.in/api/users"
+        "https://jsonplaceholder.typicode.com/users",
+        {
+            params: {
+                _limit: 3,
+            },
+        }
     );
 
     return {
@@ -55,8 +93,8 @@ export const getStaticProps = async () => {
             data,
             status,
             statusText,
-        }, // will be passed to the page component as props
+        },
     };
 };
 
-export default Home;
+export default withRouter(Home);
